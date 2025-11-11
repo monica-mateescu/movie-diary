@@ -6,11 +6,23 @@
     <title>Movie Diary</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="script/config.js"></script>
     <script src="script/main.js" defer></script>
   </head>
   <body>
     <header></header>
-    <main></main>
+    <main class="container mx-auto px-4 py-8">
+      <section id="popular-movies" class="mb-12">
+        <h2 class="text-3xl font-bold mb-6 text-slate-800">Popular Movies</h2>
+        <!-- Grid-Container für Movie Cards  -->
+        <!-- Responsives Spalten-Design: sm2 md3 lg4 -->
+        <div
+          id="movies-container"
+          class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        ></div>
+      </section>
+    </main>
+
     <footer></footer>
   </body>
 </html>

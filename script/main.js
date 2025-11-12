@@ -42,38 +42,89 @@ class MovieApp {
       // Movie rating
       const rating = movie.vote_average || "N/A";
 
-      // Create card element
+      // Create the main card
       const card = document.createElement("div");
       card.className =
-        "max-w-md rounded-lg shadow-md drop-shadow-md overflow-hidden text-black";
+        "max-w-md rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
 
-      // Set inner HTML of card
-      card.innerHTML = `
-        <div class="relative">
-          <img src="${poster}" alt="${title}" class="h-64 w-full object-cover"/>
-          <div class="absolute top-2 left-2 bg-red-600 text-white text-[6px] p-1 rounded">
-            ⭐ ${rating}/10
-          </div>
-        </div>
-        <div class="flex justify-around p-2">
-          <div>
-            <div class="text-gray-100 text-md font-bold text-center ab">
-              ${title}
-            </div>
-          </div>
-          <div>
-            <span class="material-icons-only text-white/50 hover:text-red-600">add_box</span>
-            <span class="material-icons-only text-white/50 hover:text-red-600">description</span>
-          </div>
-        </div>
-      `;
+      // Relative wrapper
+      const wrapper = document.createElement("div");
+      wrapper.className = "relative";
 
-      // Append card to container
+      // Poster image
+      const img = document.createElement("img");
+      img.src = poster;
+      img.alt = title;
+      img.className = "w-full object-cover";
+
+      // Rating badge
+      const ratingDiv = document.createElement("div");
+      ratingDiv.className =
+        "absolute top-2 left-2 bg-red-600 text-white text-[6px] p-1 rounded";
+      ratingDiv.textContent = `⭐ ${rating.toFixed(1)}/10`;
+
+      // Favorite icon
+      const favIcon = document.createElement("span");
+      favIcon.className =
+        "absolute top-1 right-7 material-icons-only cursor-pointer text-white hover:text-red-600";
+      favIcon.title = "Add to Favorite";
+      favIcon.textContent = "favorite";
+
+      // Description icon
+      const descIcon = document.createElement("span");
+      descIcon.className =
+        "absolute top-1 right-2 material-icons-only cursor-pointer text-white hover:text-red-600";
+      descIcon.title = "Add Description";
+      descIcon.textContent = "description";
+
+      // Append elements to wrapper
+      wrapper.appendChild(img);
+      wrapper.appendChild(ratingDiv);
+      wrapper.appendChild(favIcon);
+      wrapper.appendChild(descIcon);
+
+      // Movie title section
+      const titleDiv = document.createElement("div");
+      titleDiv.className = "text-gray-100 text-sm font-bold text-center ab p-2";
+      titleDiv.textContent = title;
+
+      // Append all to card
+      card.appendChild(wrapper);
+      card.appendChild(titleDiv);
+
+      // Finally add card to container
       this.container.appendChild(card);
+
+      //   const card = document.createElement("div");
+      //   card.className =
+      //     "max-w-md rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
+
+      //   // Set inner HTML of card
+      //   card.innerHTML = `
+      //     <div class="relative ">
+      //       <img src="${poster}" alt="${title}" class="w-full object-cover"/>
+
+      //       <div class="absolute top-2 left-2 bg-red-600 text-white text-[6px] p-1 rounded">
+      //         ⭐ ${rating.toFixed(1)}/10
+      //         </div>
+
+      //         <span id class="absolute top-1 right-7  material-icons-only cursor-pointer text-white hover:text-red-600 hover:"  title="Add to Favorite">favorite</span>
+      //         <span class="absolute top-1 right-2 material-icons-only cursor-pointer text-white hover:text-red-600" title="Add Description">description</span>
+
+      //       </div>
+
+      //         <div class="text-gray-100 text-sm font-bold text-center ab p-2">
+      //           ${title}
+      //            </div>
+      //     </div>
+      //   `;
+
+      //   // Append card to container
+      //   this.container.appendChild(card);
     });
   }
 }
 
 // Instantiate the class and fetch movies
-const app = new MovieApp("09851300490c7f9b0c912f3f7d0a1325");
+const app = new MovieApp(API_KEY);
 app.fetchLatestMovies();

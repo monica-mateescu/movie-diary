@@ -35,16 +35,38 @@
     <script src="script/main.js" defer></script>
   </head>
   <body class="bg-[var(--darkgray)] text-white">
-    <header class="container mx-auto p-8 flex justify-between">
-      <a href="index.html" class="text-gray-300 text-lg font-medium"
-        >MOVIE DIARY</a
-      >
-      <nav>
+    <header class="container mx-auto px-4 py-8">
+      <!-- Navigation Section -->
+      <nav class="flex justify-between">
+        <a href="index.html" class="text-gray-300 text-lg font-medium"
+          >MOVIE DIARY</a
+        >
         <ul class="flex gap-2 text-gray-100 text-sm">
           <li><a href="index.html" class="hover:text-red-600">Home</a></li>
           <li><a href="journal.html" class="hover:text-red-600">Journal</a></li>
         </ul>
       </nav>
+      <!-- Search Section -->
+      <div class="flex justify-center">
+        <form action="#" id="search-form" class="flex mt-8 w-100">
+          <div class="flex items-center bg-gray-700 rounded-full w-full">
+            <label for="search" aria-label="Search for a movie" class="flex-1">
+              <input
+                type="text"
+                placeholder="Search for a movie"
+                id="search"
+                class="bg-transparent border-0 focus:outline-none focus:ring-0 flex-1 text-gray-100 placeholder-gray-400 text-sm px-4 py-2"
+              />
+            </label>
+            <button
+              type="submit"
+              class="bg-gray-600 rounded-full hover:bg-red-600 text-gray-100 text-sm px-6 py-2"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
     </header>
     <main class="container mx-auto px-4 py-8">
       <section id="popular-movies" class="mb-12">

@@ -3,12 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <title>Movie Diary</title>
     <style>
       body {
         font-family: "Poppins", sans-serif;
       }
-
+      .material-icons-only {
+        font-family: "Material Icons";
+        font-weight: normal;
+        font-style: normal;
+        font-size: 15px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        white-space: nowrap;
+        direction: ltr;
+      }
       :root {
         --red: #ff0000; /* primary buttons, links */
         --darkgray: #282828; /* backgrounds */
@@ -28,7 +43,12 @@
         </ul>
       </nav>
     </header>
-    <main></main>
+    <main>
+      <section
+        id="cardsContainer"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 p-4"
+      ></section>
+    </main>
     <footer></footer>
   </body>
 </html>

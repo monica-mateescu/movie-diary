@@ -10,10 +10,10 @@ class MovieApp {
   }
 
   // Fetch latest movies from TMDB
-  async fetchLatestMovies() {
+  async fetchPopularMovies() {
     try {
       const response = await fetch(
-        `${this.apiUrl}/movie/now_playing?api_key=${this.apiKey}&language=en-US&page=1`
+        `${this.apiUrl}/movie/popular?api_key=${this.apiKey}&language=en-US&page=1`
       );
       const data = await response.json();
 
@@ -127,4 +127,4 @@ class MovieApp {
 
 // Instantiate the class and fetch movies
 const app = new MovieApp(API_KEY);
-app.fetchLatestMovies();
+app.fetchPopularMovies();

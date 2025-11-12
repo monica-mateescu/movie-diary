@@ -1,69 +1,130 @@
-//======================================================================
-//============= fetch API ==============================================
-//======================================================================
-async function fetchPopularMovies() {
-  const url = `${API_URL}movie/popular?language=en-US&page=1`;
+// MovieApp class to manage fetching and displaying movies
+class MovieApp {
+  constructor(apiKey) {
+    // API base URL and key
+    this.apiUrl = "https://api.themoviedb.org/3";
+    this.apiKey = apiKey;
 
-  const options = {
-    headers: {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      accept: "application/json",
-    },
-  };
+    // DOM container where movie cards will be displayed
+    this.container = document.querySelector("#cardsContainer");
+  }
 
-  try {
-    const response = await fetch(url, options);
-    const data = await response.json();
-
-    console.log("Fetched movies:", data.results);
-
-    const container = document.getElementById("movies-container");
-    // sicherer als innerHTML = ""
-    container.textContent = "";
-
-    data.results.slice(0, 8).forEach((movie) => {
-      // === Card-Container ===
-      const card = document.createElement("div");
-      card.classList.add(
-        "bg-white",
-        "shadow-md",
-        "rounded-lg",
-        "overflow-hidden",
-        "hover:shadow-xl",
-        "transition-shadow",
-        "duration-300"
+  // Fetch latest movies from TMDB
+  async fetchLatestMovies() {
+    try {
+      const response = await fetch(
+        `${this.apiUrl}/movie/now_playing?api_key=${this.apiKey}&language=en-US&page=1`
       );
+      const data = await response.json();
 
-      // === Poster ===
+      // Take only the first 20 movies
+      const movies = data.results.slice(0, 20);
+
+      // Display movies in the container
+      this.displayMovies(movies);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    }
+  }
+
+  // Create and append movie cards to the container
+  displayMovies(movies) {
+    // Clear previous cards
+    this.container.innerHTML = "";
+
+    movies.forEach((movie) => {
+      // Movie title and poster
+      const title = movie.title || movie.name;
+      const poster = movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : "https://via.placeholder.com/200x300?text=No+Image";
+
+      // Movie rating
+      const rating = movie.vote_average || "N/A";
+
+      // Create the main card
+      const card = document.createElement("div");
+      card.className =
+        "max-w-md rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
+
+      // Relative wrapper
+      const wrapper = document.createElement("div");
+      wrapper.className = "relative";
+
+      // Poster image
       const img = document.createElement("img");
-      img.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-      img.alt = movie.title;
-      img.classList.add("w-full", "h-72", "object-cover");
+      img.src = poster;
+      img.alt = title;
+      img.className = "w-full object-cover";
 
-      // === Info-Container ===
-      const info = document.createElement("div");
-      info.classList.add("p-4");
+      // Rating badge
+      const ratingDiv = document.createElement("div");
+      ratingDiv.className =
+        "absolute top-2 left-2 bg-red-600 text-white text-[6px] p-1 rounded";
+      ratingDiv.textContent = `⭐ ${rating.toFixed(1)}/10`;
 
-      // === Titel ===
-      const title = document.createElement("h3");
-      title.textContent = movie.title;
-      title.classList.add("text-lg", "font-semibold", "text-gray-800", "mb-2");
+      // Favorite icon
+      const favIcon = document.createElement("span");
+      favIcon.className =
+        "absolute top-1 right-7 material-icons-only cursor-pointer text-white hover:text-red-600";
+      favIcon.title = "Add to Favorite";
+      favIcon.textContent = "favorite";
 
-      // === Bewertung ===
-      const rating = document.createElement("p");
-      rating.textContent = `⭐ ${movie.vote_average} / 10`;
-      rating.classList.add("text-sm", "text-gray-600");
+      // Description icon
+      const descIcon = document.createElement("span");
+      descIcon.className =
+        "absolute top-1 right-2 material-icons-only cursor-pointer text-white hover:text-red-600";
+      descIcon.title = "Add Description";
+      descIcon.textContent = "description";
 
-      // === Zusammensetzen ===
-      info.appendChild(title);
-      info.appendChild(rating);
-      card.appendChild(img);
-      card.appendChild(info);
-      container.appendChild(card);
+      // Append elements to wrapper
+      wrapper.appendChild(img);
+      wrapper.appendChild(ratingDiv);
+      wrapper.appendChild(favIcon);
+      wrapper.appendChild(descIcon);
+
+      // Movie title section
+      const titleDiv = document.createElement("div");
+      titleDiv.className = "text-gray-100 text-sm font-bold text-center ab p-2";
+      titleDiv.textContent = title;
+
+      // Append all to card
+      card.appendChild(wrapper);
+      card.appendChild(titleDiv);
+
+      // Finally add card to container
+      this.container.appendChild(card);
+
+      //   const card = document.createElement("div");
+      //   card.className =
+      //     "max-w-md rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
+
+      //   // Set inner HTML of card
+      //   card.innerHTML = `
+      //     <div class="relative ">
+      //       <img src="${poster}" alt="${title}" class="w-full object-cover"/>
+
+      //       <div class="absolute top-2 left-2 bg-red-600 text-white text-[6px] p-1 rounded">
+      //         ⭐ ${rating.toFixed(1)}/10
+      //         </div>
+
+      //         <span id class="absolute top-1 right-7  material-icons-only cursor-pointer text-white hover:text-red-600 hover:"  title="Add to Favorite">favorite</span>
+      //         <span class="absolute top-1 right-2 material-icons-only cursor-pointer text-white hover:text-red-600" title="Add Description">description</span>
+
+      //       </div>
+
+      //         <div class="text-gray-100 text-sm font-bold text-center ab p-2">
+      //           ${title}
+      //            </div>
+      //     </div>
+      //   `;
+
+      //   // Append card to container
+      //   this.container.appendChild(card);
     });
-  } catch (error) {
-    console.error("Error fetching movies:", error);
   }
 }
 
-fetchPopularMovies();
+// Instantiate the class and fetch movies
+const app = new MovieApp(API_KEY);
+app.fetchLatestMovies();

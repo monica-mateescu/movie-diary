@@ -1,3 +1,20 @@
+import {
+  addToFavourites,
+  getFavourites,
+  isFavourite,
+  removeFromFavourites,
+} from "./favourites.js";
+
+function getIconSize() {
+  if (window.innerWidth < 640) {
+    return "28px";
+  } else if (window.innerWidth < 1024) {
+    return "32px";
+  } else {
+    return "36px";
+  }
+}
+
 // MovieApp class to manage fetching and displaying movies
 class MovieApp {
   constructor(apiKey) {
@@ -66,22 +83,55 @@ class MovieApp {
       // Favorite icon
       const favIcon = document.createElement("span");
       favIcon.className =
-        "absolute top-1 right-7 material-icons-only cursor-pointer text-white hover:text-red-600";
+        "material-icons-only cursor-pointer text-white hover:text-red-600";
+
       favIcon.title = "Add to Favorite";
       favIcon.textContent = "favorite";
+      favIcon.style.fontSize = getIconSize();
+
+      //============================================================
+      //============ ADD FAVOURITES ================================
+      //============================================================
+      const alreadyFav = isFavourite(movie.id);
+      if (alreadyFav) {
+        favIcon.style.color = "red"; // nur Favoriten explizit färben
+      }
+
+      favIcon.addEventListener("click", () => {
+        const movieObj = {
+          id: movie.id,
+          title: movie.title,
+          image: movie.poster_path,
+          info: movie.overview,
+        };
+
+        if (isFavourite(movie.id)) {
+          removeFromFavourites(movie.id);
+          favIcon.style.color = "";
+        } else {
+          addToFavourites(movieObj);
+          favIcon.style.color = "red";
+        }
+      });
 
       // Description icon
       const descIcon = document.createElement("span");
       descIcon.className =
-        "absolute top-1 right-2 material-icons-only cursor-pointer text-white hover:text-red-600";
+        "material-icons-only cursor-pointer text-white hover:text-red-600";
+
       descIcon.title = "Add Description";
       descIcon.textContent = "description";
+      descIcon.style.fontSize = getIconSize();
 
-      // Append elements to wrapper
+      // ICON WRAPPER (NEU)
+      const iconWrapper = document.createElement("div");
+      iconWrapper.className =
+        "absolute top-1 right-1 flex items-center gap-0.5 z-10";
+      iconWrapper.appendChild(favIcon);
+      iconWrapper.appendChild(descIcon);
       wrapper.appendChild(img);
       wrapper.appendChild(ratingDiv);
-      wrapper.appendChild(favIcon);
-      wrapper.appendChild(descIcon);
+      wrapper.appendChild(iconWrapper);
 
       // Movie title section
       const titleDiv = document.createElement("div");
@@ -128,3 +178,10 @@ class MovieApp {
 // Instantiate the class and fetch movies
 const app = new MovieApp(API_KEY);
 app.fetchPopularMovies();
+
+// Responsive Design: Icons
+window.addEventListener("resize", () => {
+  document.querySelectorAll(".material-icons-only").forEach((icon) => {
+    icon.style.fontSize = getIconSize();
+  });
+});

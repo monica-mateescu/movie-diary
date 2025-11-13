@@ -12,7 +12,7 @@ const options = {
 const fetchSearchMovie = async (query) => {
   const endpoint = Number(query)
     ? `movie/${query}`
-    : `search/movie?query=${query}`;
+    : `search/movie?query=${encodeURIComponent(query)}`;
 
   try {
     const res = await fetch(

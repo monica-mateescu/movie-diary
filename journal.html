@@ -4,10 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movie Diary | Journal</title>
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      .material-icons-only {
+        font-family: "Material Icons";
+        font-weight: normal;
+        font-style: normal;
+        font-size: 16px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        white-space: nowrap;
+        direction: ltr;
+      }
+      :root {
+        --red: #ff0000; /* primary buttons, links */
+        --darkgray: #282828; /* backgrounds */
+        --lightgray: #787777; /* secondary text & Cards bg*/
+      }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <script src="script/journal.js" defer></script>
+    <script src="script/search.js" type="module"></script>
   </head>
-  <body>
+  <body class="bg-[var(--darkgray)] text-white">
     <header class="container mx-auto px-4 py-8">
       <!-- Navigation Section -->
       <nav class="flex justify-between">

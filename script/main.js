@@ -18,7 +18,7 @@ class MovieApp {
       const data = await response.json();
 
       // Take only the first 20 movies
-      const movies = data.results.slice(0, 20);
+      const movies = data.results.slice(0, 10);
 
       // Display movies in the container
       this.displayMovies(movies);
@@ -45,7 +45,7 @@ class MovieApp {
       // Create the main card
       const card = document.createElement("div");
       card.className =
-        "max-w-md rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
+        "max-w-xs sm:max-w-sm md:max-w-md  rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
 
       // Relative wrapper
       const wrapper = document.createElement("div");
@@ -60,7 +60,7 @@ class MovieApp {
       // Rating badge
       const ratingDiv = document.createElement("div");
       ratingDiv.className =
-        "absolute top-2 left-2 bg-red-600 text-white text-[6px] p-1 rounded";
+        "absolute top-2 left-2 bg-red-600 text-white text-[8px] p-1 rounded";
       ratingDiv.textContent = `⭐ ${rating.toFixed(1)}/10`;
 
       // Favorite icon

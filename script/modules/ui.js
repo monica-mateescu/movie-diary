@@ -9,7 +9,6 @@ const createDialog = (movies) => {
   const dialogContainer = document.createElement("div");
   const dialog = document.createElement("div");
   const closeBtn = document.createElement("button");
-  const p = document.createElement("p");
 
   dialogContainer.className =
     "fixed top-0 left-0 w-full h-full flex justify-center items-center";
@@ -20,6 +19,7 @@ const createDialog = (movies) => {
   closeBtn.textContent = "x";
 
   if (movies.length === 0) {
+    const p = document.createElement("p");
     p.className = "text-gray-100 pt-20";
     p.textContent = "No results found.";
     dialog.appendChild(p);
@@ -32,6 +32,7 @@ const createDialog = (movies) => {
       const div = document.createElement("div");
       const h2 = document.createElement("h2");
       const span = document.createElement("span");
+      const p = document.createElement("p");
 
       divContainer.className =
         "flex items-center border-b-2 border-gray-600 p-2";

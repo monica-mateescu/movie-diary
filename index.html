@@ -16,7 +16,7 @@
         font-family: "Material Icons";
         font-weight: normal;
         font-style: normal;
-        font-size: 16px;
+        font-size: 10px;
         display: inline-block;
         line-height: 1;
         text-transform: none;
@@ -39,12 +39,22 @@
       .icon-hover:hover {
         transform: scale(1.15);
       }
-
+      /* .line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+} */
       :root {
-        --red: #ff0000; /* primary buttons, links */
-        --darkgray: #282828; /* backgrounds */
-        --lightgray: #787777; /* secondary text & Cards bg*/
+        --primary-red: #ff4c60; /* favorite & buttons */
+        --background-dark: #1b1f28; /* body background */
+        --card-bg: #2a2e3e; /* card background */
+        --text-light: #e1e2ec; /* titles and text */
+        --icon-light: #f0f0f0; /* icons */
+        --icon-desc: white; /* description icon */
+        --border-gray: #3a3f4f; /* borders */
       }
+
       @keyframes fav-bounce {
         0% {
           transform: scale(1.15);
@@ -68,33 +78,43 @@
     <script src="script/main.js" type="module"></script>
     <script src="script/search.js" type="module"></script>
   </head>
-  <body class="bg-[var(--darkgray)] text-white">
+  <body class="bg-[#1B1F28] text-[#E1E2EC]">
     <header class="container mx-auto px-4 py-8">
       <!-- Navigation Section -->
       <nav class="flex justify-between">
-        <a href="index.html" class="text-gray-300 text-lg font-medium"
+        <a
+          href="index.html"
+          class="text-[var(--text-light)] text-lg font-medium"
           >MOVIE DIARY</a
         >
         <ul class="flex gap-2 text-gray-100 text-sm">
-          <li><a href="index.html" class="hover:text-red-600">Home</a></li>
-          <li><a href="journal.html" class="hover:text-red-600">Journal</a></li>
+          <li>
+            <a href="index.html" class="hover:text-[var(--primary-red)]"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a href="journal.html" class="hover:text-[var(--primary-red)]"
+              >Journal</a
+            >
+          </li>
         </ul>
       </nav>
       <!-- Search Section -->
       <div class="flex justify-center">
         <form action="#" id="search-form" class="flex mt-8 w-100">
-          <div class="flex items-center bg-gray-700 rounded-full w-full">
+          <div class="flex items-center bg-[#2A2E3E] rounded-full w-full">
             <label for="search" aria-label="Search for a movie" class="flex-1">
               <input
                 type="text"
                 placeholder="Search for a movie"
                 id="search"
-                class="bg-transparent border-0 focus:outline-none focus:ring-0 flex-1 text-gray-100 placeholder-gray-400 text-sm px-4 py-2"
+                class="border-0 focus:outline-none focus:ring-0 flex-1 text-[var(--text-light)] placeholder-gray-400 text-sm px-4 py-2"
               />
             </label>
             <button
               type="submit"
-              class="bg-gray-600 rounded-full hover:bg-red-600 text-gray-100 text-sm px-6 py-2"
+              class="bg-[var(--primary-red)] rounded-full hover:bg-[#FF2A45] text[var(--text-light)] text-sm px-6 py-2 ; color: var(--text-light);"
             >
               Search
             </button>
@@ -105,14 +125,14 @@
     <main class="container mx-auto px-4 py-8">
       <section
         id="popular-movies "
-        class="mt-12 mb-12 border-t border-gray-600"
+        class="mt-12 mb-12 border-t border-[ver(--border-gray)]"
       >
-        <h2 class="text-3xl font-bold ml-3 mt-4 mb-6 text-white">
+        <h2 class="text-3xl font-bold ml-3 mt-4 mb-6 text-[var(--text-light)]">
           Popular Movies
         </h2>
         <div
           id="cardsContainer"
-          class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 p-4"
+          class="flex flex-wrap justify-between gap-4"
         ></div>
       </section>
     </main>

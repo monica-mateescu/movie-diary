@@ -1,6 +1,4 @@
-// FR012 AUFGABE
-// Add "favourites” button
-// Store movies (as objects) in an array inside localStorage
+//======== Favourites Module ============================
 
 export function getFavourites() {
   return JSON.parse(localStorage.getItem("favs")) || [];
@@ -29,4 +27,20 @@ export function addToFavourites(movieObj) {
   const currentFavs = getFavourites();
   const newFavs = addFavourites(currentFavs, movieObj);
   saveFavourites(newFavs);
+}
+export function getIconSize() {
+  if (window.innerWidth < 640) {
+    return "28px";
+  } else if (window.innerWidth < 1024) {
+    return "32px";
+  } else {
+    return "36px";
+  }
+}
+export function setupResponsiveIcons() {
+  window.addEventListener("resize", () => {
+    document.querySelectorAll(".material-icons-only").forEach((icon) => {
+      icon.style.fontSize = getIconSize();
+    });
+  });
 }

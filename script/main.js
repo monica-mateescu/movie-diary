@@ -1,19 +1,11 @@
 import {
   addToFavourites,
   getFavourites,
+  getIconSize,
   isFavourite,
   removeFromFavourites,
+  setupResponsiveIcons,
 } from "./favourites.js";
-
-function getIconSize() {
-  if (window.innerWidth < 640) {
-    return "28px";
-  } else if (window.innerWidth < 1024) {
-    return "32px";
-  } else {
-    return "36px";
-  }
-}
 
 // MovieApp class to manage fetching and displaying movies
 class MovieApp {
@@ -62,7 +54,7 @@ class MovieApp {
       // Create the main card
       const card = document.createElement("div");
       card.className =
-        "max-w-xs sm:max-w-sm md:max-w-md  rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
+        "max-w-xs sm:max-w-sm md:max-w-md  rounded-lg shadow-md drop-shadow-md overflow-visible text-black hover:scale-105 duration-300";
 
       // Relative wrapper
       const wrapper = document.createElement("div");
@@ -83,18 +75,21 @@ class MovieApp {
       // Favorite icon
       const favIcon = document.createElement("span");
       favIcon.className =
-        "material-icons-only cursor-pointer text-white hover:text-red-600";
+        "material-icons-only icon-hover icon-animated cursor-pointer text-white";
 
       favIcon.title = "Add to Favorite";
       favIcon.textContent = "favorite";
       favIcon.style.fontSize = getIconSize();
+      favIcon.addEventListener("animationend", () => {
+        favIcon.classList.remove("bounce-on-click");
+      });
 
       //============================================================
       //============ ADD FAVOURITES ================================
       //============================================================
       const alreadyFav = isFavourite(movie.id);
       if (alreadyFav) {
-        favIcon.style.color = "red"; // nur Favoriten explizit färben
+        favIcon.style.color = "red";
       }
 
       favIcon.addEventListener("click", () => {
@@ -105,6 +100,13 @@ class MovieApp {
           info: movie.overview,
         };
 
+        if (!isFavourite(movie.id)) {
+          // 💥 Bounce-Effekt beim Klicken
+          favIcon.classList.remove("bounce-on-click");
+          void favIcon.offsetWidth;
+          favIcon.classList.add("bounce-on-click");
+        }
+
         if (isFavourite(movie.id)) {
           removeFromFavourites(movie.id);
           favIcon.style.color = "";
@@ -113,11 +115,10 @@ class MovieApp {
           favIcon.style.color = "red";
         }
       });
-
       // Description icon
       const descIcon = document.createElement("span");
       descIcon.className =
-        "material-icons-only cursor-pointer text-white hover:text-red-600";
+        "material-icons-only icon-hover icon-animated cursor-pointer text-white";
 
       descIcon.title = "Add Description";
       descIcon.textContent = "description";
@@ -180,8 +181,4 @@ const app = new MovieApp(API_KEY);
 app.fetchPopularMovies();
 
 // Responsive Design: Icons
-window.addEventListener("resize", () => {
-  document.querySelectorAll(".material-icons-only").forEach((icon) => {
-    icon.style.fontSize = getIconSize();
-  });
-});
+setupResponsiveIcons();

@@ -23,11 +23,44 @@
         letter-spacing: normal;
         white-space: nowrap;
         direction: ltr;
+        user-select: none;
+        -webkit-user-select: none;
+        outline: none;
+        pointer-events: auto;
+        transition: transform 0.2s ease-out, color 0.2s ease-out;
       }
+      .material-icons-only:focus {
+        outline: none;
+      }
+      .icon-hover {
+        transition: transform 0.18s ease-out;
+      }
+
+      .icon-hover:hover {
+        transform: scale(1.15);
+      }
+
       :root {
         --red: #ff0000; /* primary buttons, links */
         --darkgray: #282828; /* backgrounds */
         --lightgray: #787777; /* secondary text & Cards bg*/
+      }
+      @keyframes fav-bounce {
+        0% {
+          transform: scale(1.15);
+        }
+        30% {
+          transform: scale(1.6);
+        }
+        60% {
+          transform: scale(0.95);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .bounce-on-click {
+        animation: fav-bounce 0.7s ease-out;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>

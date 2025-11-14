@@ -4,6 +4,8 @@ import {
   setupResponsiveIcons,
 } from "./favourites.js";
 
+import { addNoteToFavorite } from "./modules/ui.js";
+
 const main = document.querySelector("main");
 
 function getIconSize() {
@@ -90,6 +92,11 @@ function renderJournal() {
     descIcon.textContent = "description";
     descIcon.title = "Add Description";
     descIcon.style.fontSize = getIconSize();
+
+    // Add personal notes
+    descIcon.addEventListener("click", () => {
+      addNoteToFavorite(movie.id);
+    });
 
     iconWrapper.appendChild(favIcon);
     iconWrapper.appendChild(descIcon);

@@ -1,4 +1,4 @@
-const container = document.body;
+const body = document.body;
 
 const truncate = (text, maxLength) => {
   if (!text) return "";
@@ -6,21 +6,34 @@ const truncate = (text, maxLength) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
 
-const createDialog = (movies) => {
+// Create dialog
+const createDialog = () => {
   const dialog = document.createElement("dialog");
-  const dialogContainer = document.createElement("div");
+  const container = document.createElement("div");
   const closeBtn = document.createElement("button");
-  const moviesContainer = document.createElement("div");
+  const content = document.createElement("div");
 
   dialog.className =
     "fixed inset-0 flex justify-center items-center w-full h-full bg-black/40 backdrop-blur-sm z-50";
-  dialogContainer.className =
+  container.className =
     "bg-gray-700 rounded-lg w-full lg:w-2/3 max-h-[80vh] p-4 relative";
   closeBtn.className =
     "absolute top-4 right-4 bg-gray-600 hover:bg-red-600 rounded-lg px-2 text-gray-100 hover:text-white text-sm font-bold cursor-pointer";
   closeBtn.textContent = "x";
 
-  moviesContainer.className = "overflow-y-auto max-h-[65vh] pr-2";
+  content.className = "overflow-y-auto max-h-[65vh] pr-2";
+
+  container.append(closeBtn, content);
+  dialog.appendChild(container);
+
+  closeBtn.addEventListener("click", () => dialog.remove());
+
+  return { dialog, content };
+};
+
+// Display search results in a dialog
+const displayMovies = (movies) => {
+  const { dialog, content } = createDialog();
 
   if (movies.length === 0) {
     const p = document.createElement("p");
@@ -61,21 +74,116 @@ const createDialog = (movies) => {
         : "";
       p.textContent = truncate(overview, 250);
 
-      div.appendChild(h2);
-      div.appendChild(span);
-      div.appendChild(p);
-
+      div.append(h2, span, p);
       article.appendChild(div);
-      moviesContainer.appendChild(article);
+      content.appendChild(article);
     }
   }
 
-  dialogContainer.appendChild(closeBtn);
-  dialogContainer.appendChild(moviesContainer);
-  dialog.appendChild(dialogContainer);
-  container.appendChild(dialog);
-
-  closeBtn.addEventListener("click", () => dialog.remove());
+  body.appendChild(dialog);
 };
 
-export { createDialog };
+// Display notes
+const displayNotes = (fav, container) => {
+  if (!container) return;
+
+  const oldUl = container.querySelector("ul");
+  if (oldUl) oldUl.remove();
+
+  const ul = document.createElement("ul");
+
+  const notes = fav.notes ?? [];
+
+  for (const note of notes) {
+    const li = document.createElement("li");
+    const p = document.createElement("p");
+    const deleteBtn = document.createElement("button");
+
+    li.className =
+      "border-b-2 border-gray-600 text-gray-100 flex gap-4 items-baseline px-4 py-2 justify-between";
+    p.textContent = note.content;
+
+    deleteBtn.className =
+      "text-red-400 hover:text-red-600 active:text-red-600 text-sm";
+    deleteBtn.textContent = "Delete";
+
+    deleteBtn.addEventListener("click", () => {
+      const favs = JSON.parse(localStorage.getItem("favs")) ?? [];
+
+      const newFav = favs.find((f) => f.id === fav.id);
+
+      if (newFav.notes) {
+        const notesUpdated = newFav.notes.filter((n) => n.id !== note.id);
+
+        newFav.notes = notesUpdated;
+      }
+
+      localStorage.setItem("favs", JSON.stringify(favs));
+
+      li.remove();
+    });
+
+    li.append(p, deleteBtn);
+    ul.prepend(li);
+  }
+
+  container.appendChild(ul);
+};
+
+// Add notes to favorite
+const addNoteToFavorite = (id) => {
+  const { dialog, content } = createDialog();
+
+  const favs = JSON.parse(localStorage.getItem("favs")) ?? [];
+  const fav = favs.find((fav) => fav.id === id);
+
+  const form = document.createElement("form");
+  const noteInput = document.createElement("textarea");
+  const saveBtn = document.createElement("button");
+
+  form.className = "py-6";
+  noteInput.className =
+    "mt-2 w-full bg-gray-800 text-gray-100 p-2 rounded resize-none text-sm";
+  noteInput.placeholder = "Add your note here...";
+  saveBtn.className =
+    "mt-1 bg-gray-600 hover:bg-red-600 active:bg-red-600 text-gray-100 px-2 py-1 rounded text-xs";
+  saveBtn.textContent = "Save Note";
+
+  form.append(noteInput, saveBtn);
+  content.appendChild(form);
+  body.appendChild(dialog);
+
+  displayNotes(fav, content);
+
+  saveBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const val = noteInput.value.trim();
+
+    if (!val) {
+      const p = document.createElement("p");
+      p.className = "text-red-600 text-xs";
+      p.textContent = "Input cannot be empty";
+
+      noteInput.insertAdjacentElement("afterend", p);
+
+      return;
+    }
+
+    fav.notes = fav.notes ?? [];
+
+    const newNote = {
+      id: "note-" + crypto.randomUUID(),
+      content: val,
+    };
+
+    fav.notes.push(newNote);
+    localStorage.setItem("favs", JSON.stringify(favs));
+
+    displayNotes(fav, content);
+
+    form.reset();
+  });
+};
+
+export { displayMovies, addNoteToFavorite };

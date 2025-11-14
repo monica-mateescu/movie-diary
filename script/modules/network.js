@@ -1,4 +1,4 @@
-import { createDialog } from "./ui.js";
+import { displayMovies } from "./ui.js";
 
 const options = {
   method: "GET",
@@ -26,7 +26,7 @@ const fetchSearchMovie = async (query) => {
 
     const movies = data.results ?? [data];
 
-    createDialog(movies);
+    displayMovies(movies);
   } catch (error) {
     console.log(error);
   }

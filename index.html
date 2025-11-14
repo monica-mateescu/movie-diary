@@ -39,7 +39,12 @@
       .icon-hover:hover {
         transform: scale(1.15);
       }
-
+      /* .line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+} */
       :root {
         --primary-red: #ff4c60; /* favorite & buttons */
         --background-dark: #1b1f28; /* body background */
@@ -49,6 +54,7 @@
         --icon-desc: white; /* description icon */
         --border-gray: #3a3f4f; /* borders */
       }
+
       @keyframes fav-bounce {
         0% {
           transform: scale(1.15);
@@ -76,12 +82,22 @@
     <header class="container mx-auto px-4 py-8">
       <!-- Navigation Section -->
       <nav class="flex justify-between">
-        <a href="index.html" class="text-gray-300 text-lg font-medium"
+        <a
+          href="index.html"
+          class="text-[var(--text-light)] text-lg font-medium"
           >MOVIE DIARY</a
         >
         <ul class="flex gap-2 text-gray-100 text-sm">
-          <li><a href="index.html" class="hover:text-red-600">Home</a></li>
-          <li><a href="journal.html" class="hover:text-red-600">Journal</a></li>
+          <li>
+            <a href="index.html" class="hover:text-[var(--primary-red)]"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a href="journal.html" class="hover:text-[var(--primary-red)]"
+              >Journal</a
+            >
+          </li>
         </ul>
       </nav>
       <!-- Search Section -->
@@ -109,14 +125,14 @@
     <main class="container mx-auto px-4 py-8">
       <section
         id="popular-movies "
-        class="mt-12 mb-12 border-t border-[--border-gray]"
+        class="mt-12 mb-12 border-t border-[ver(--border-gray)]"
       >
-        <h2 class="text-3xl font-bold ml-3 mt-4 mb-6 text-white">
+        <h2 class="text-3xl font-bold ml-3 mt-4 mb-6 text-[var(--text-light)]">
           Popular Movies
         </h2>
         <div
           id="cardsContainer"
-          class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 p-4"
+          class="flex flex-wrap justify-between gap-4"
         ></div>
       </section>
     </main>

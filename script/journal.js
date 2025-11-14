@@ -1,6 +1,20 @@
-import { getFavourites } from "./favourites.js";
+import {
+  getFavourites,
+  removeFromFavourites,
+  setupResponsiveIcons,
+} from "./favourites.js";
 
 const main = document.querySelector("main");
+
+function getIconSize() {
+  if (window.innerWidth < 640) {
+    return "28px";
+  } else if (window.innerWidth < 1024) {
+    return "32px";
+  } else {
+    return "36px";
+  }
+}
 
 function createJournalLayout() {
   const section = document.createElement("section");
@@ -41,17 +55,48 @@ function renderJournal() {
   favourites.forEach((movie) => {
     const card = document.createElement("article");
     card.className =
-      "max-w-xs sm:max-w-sm rounded-lg shadow-md drop-shadow-md overflow-hidden bg-[var(--lightgray)]";
+      "max-w-xs sm:max-w-sm rounded-lg shadow-md drop-shadow-md overflow-visible bg-[var(--lightgray)]";
 
-    // Bild-URL wieder zusammensetzen, falls nur der Pfad gespeichert wurde
+    const wrapper = document.createElement("div");
+    wrapper.className = "relative";
+
+    // === Movie Image ===
     const img = document.createElement("img");
     const imagePath = movie.image;
-    img.src = imagePath.startsWith("http")
-      ? imagePath
-      : `https://image.tmdb.org/t/p/w500${imagePath}`;
+    img.src =
+      typeof imagePath === "string" && imagePath.startsWith("http")
+        ? imagePath
+        : `https://image.tmdb.org/t/p/w500${imagePath}`;
     img.alt = movie.title;
     img.className = "w-full object-cover";
 
+    const iconWrapper = document.createElement("div");
+    iconWrapper.className =
+      "absolute top-1 right-1 flex items-center gap-0.5 z-10";
+
+    // === Icon Favourites ===
+    const favIcon = document.createElement("span");
+    favIcon.className =
+      "material-icons-only icon-hover cursor-pointer text-white";
+    favIcon.textContent = "favorite";
+    favIcon.title = "Remove from favourites";
+    favIcon.style.fontSize = getIconSize();
+    favIcon.style.color = "red";
+
+    // === Icon Notes ===
+    const descIcon = document.createElement("span");
+    descIcon.className =
+      "material-icons-only icon-hover cursor-pointer text-white ";
+    descIcon.textContent = "description";
+    descIcon.title = "Add Description";
+    descIcon.style.fontSize = getIconSize();
+
+    iconWrapper.appendChild(favIcon);
+    iconWrapper.appendChild(descIcon);
+    wrapper.appendChild(img);
+    wrapper.appendChild(iconWrapper);
+
+    // === Movie Info ===
     const body = document.createElement("div");
     body.className = "p-3";
 
@@ -69,14 +114,26 @@ function renderJournal() {
 
     body.appendChild(title);
     body.appendChild(info);
-
-    card.appendChild(img);
+    card.appendChild(wrapper);
     card.appendChild(body);
-
     grid.appendChild(card);
+
+    // === Remove Favourites ==============
+    favIcon.addEventListener("click", () => {
+      removeFromFavourites(movie.id);
+      card.remove();
+
+      if (!grid.children.length) {
+        section.removeChild(grid);
+        renderEmptyState(section);
+      }
+    });
   });
 
   section.appendChild(grid);
 }
+
+// Responsive Design: Icons
+setupResponsiveIcons();
 
 renderJournal();

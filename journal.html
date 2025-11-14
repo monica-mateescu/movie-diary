@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <title>Movie Diary | Journal</title>
 
     <style>
@@ -20,7 +25,22 @@
         letter-spacing: normal;
         white-space: nowrap;
         direction: ltr;
+        user-select: none;
+        -webkit-user-select: none;
+        outline: none;
+        pointer-events: auto;
       }
+      .material-icons-only:focus {
+        outline: none;
+      }
+      .icon-hover {
+        transition: transform 0.18s ease-out;
+      }
+
+      .icon-hover:hover {
+        transform: scale(1.25);
+      }
+
       :root {
         --red: #ff0000; /* primary buttons, links */
         --darkgray: #282828; /* backgrounds */

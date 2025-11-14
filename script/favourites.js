@@ -30,11 +30,11 @@ export function addToFavourites(movieObj) {
 }
 export function getIconSize() {
   if (window.innerWidth < 640) {
-    return "28px";
+    return "20px";
   } else if (window.innerWidth < 1024) {
-    return "32px";
+    return "20px";
   } else {
-    return "36px";
+    return "25px";
   }
 }
 export function setupResponsiveIcons() {

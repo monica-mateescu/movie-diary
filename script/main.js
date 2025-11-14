@@ -54,7 +54,7 @@ class MovieApp {
       // Create the main card
       const card = document.createElement("div");
       card.className =
-        "max-w-xs sm:max-w-sm md:max-w-md  rounded-lg shadow-md drop-shadow-md overflow-visible text-black hover:scale-105 duration-300";
+        "bg-[var(--card-bg)] max-w-xs sm:max-w-sm md:max-w-md  rounded-lg shadow-md drop-shadow-md overflow-visible text-black hover:scale-105 duration-300";
 
       // Relative wrapper
       const wrapper = document.createElement("div");
@@ -64,13 +64,19 @@ class MovieApp {
       const img = document.createElement("img");
       img.src = poster;
       img.alt = title;
-      img.className = "w-full object-cover";
+      // img.className = "w-full object-cover";
+      img.className = "w-full h-[200px] object-cover";
+
+      // --- Bottom fade overlay ---
+      const fade = document.createElement("div");
+      fade.className =
+        "absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-t from-[#2A2E3E] via-[#2A2E3Eaa] to-transparent pointer-events-none";
 
       // Rating badge
       const ratingDiv = document.createElement("div");
       ratingDiv.className =
-        "absolute top-2 left-2 bg-red-600 text-white text-[8px] p-1 rounded";
-      ratingDiv.textContent = `⭐ ${rating.toFixed(1)}/10`;
+        "absolute top-2 left-2 bg-[#FF4C60] text-white text-[8px] p-1 rounded";
+      ratingDiv.textContent = `${rating.toFixed(1)}/10`;
 
       // Favorite icon
       const favIcon = document.createElement("span");
@@ -131,12 +137,14 @@ class MovieApp {
       iconWrapper.appendChild(favIcon);
       iconWrapper.appendChild(descIcon);
       wrapper.appendChild(img);
+      wrapper.appendChild(fade);
       wrapper.appendChild(ratingDiv);
       wrapper.appendChild(iconWrapper);
 
       // Movie title section
       const titleDiv = document.createElement("div");
-      titleDiv.className = "text-gray-100 text-sm font-bold text-center ab p-2";
+      titleDiv.className =
+        "text-[var(--text-light)] text-sm font-bold text-center ab p-2";
       titleDiv.textContent = title;
 
       // Append all to card

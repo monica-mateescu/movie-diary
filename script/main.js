@@ -5,8 +5,10 @@ import {
   isFavourite,
   removeFromFavourites,
   setupResponsiveIcons,
+  getNotes,
 } from "./favourites.js";
 import { searchForm, handleSearchFormSubmit } from "./modules/search.js";
+import { renderNotes } from "./modules/ui.js";
 
 // MovieApp class to manage fetching and displaying movies
 class MovieApp {
@@ -122,24 +124,45 @@ class MovieApp {
           favIcon.style.color = "#ff4c60";
         }
       });
-      // Description icon
-      const descIcon = document.createElement("span");
-      descIcon.className =
-        "material-icons-only icon-hover icon-animated cursor-pointer text-[var(--icon-light)]";
-
-      descIcon.title = "Add Description";
-      descIcon.textContent = "description";
-      descIcon.style.fontSize = getIconSize();
 
       // ICON WRAPPER (NEU)
       const iconWrapper = document.createElement("div");
       iconWrapper.className =
         "absolute top-1 right-1 flex items-center gap-0.5 z-10";
       iconWrapper.appendChild(favIcon);
-      iconWrapper.appendChild(descIcon);
       wrapper.appendChild(img);
       wrapper.appendChild(fade);
       wrapper.appendChild(ratingDiv);
+
+      // Description icon and notes list
+      if (isFavourite(movie.id) && getNotes(movie.id)) {
+        const noteOverlay = document.createElement("div");
+
+        const notes = getNotes(movie.id);
+
+        const descIcon = document.createElement("span");
+        descIcon.className =
+          "material-icons-only icon-hover icon-animated cursor-pointer text-yellow-400";
+
+        descIcon.title = "Add Description";
+        descIcon.textContent = "description";
+        descIcon.style.fontSize = getIconSize();
+
+        iconWrapper.appendChild(descIcon);
+
+        descIcon.addEventListener("mouseenter", () => {
+          renderNotes(notes, noteOverlay);
+
+          noteOverlay.className =
+            "absolute w-full h-full inset-0 bg-yellow-400 flex flex-col justify-end p-4";
+          wrapper.appendChild(noteOverlay);
+        });
+        descIcon.addEventListener("mouseleave", () => {
+          console.log("moueleave");
+          noteOverlay.remove();
+        });
+      }
+
       wrapper.appendChild(iconWrapper);
 
       // Movie title section

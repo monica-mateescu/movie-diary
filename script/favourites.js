@@ -44,3 +44,10 @@ export function setupResponsiveIcons() {
     });
   });
 }
+
+export function getNotes(id) {
+  const favs = getFavourites();
+  const fav = favs.find((fav) => fav.id === id);
+
+  return fav.notes ?? [];
+}

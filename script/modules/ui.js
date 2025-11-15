@@ -189,4 +189,23 @@ const addNoteToFavorite = (id) => {
   });
 };
 
-export { displayMovies, addNoteToFavorite };
+const renderNotes = (notes, container) => {
+  container.innerHTML = "";
+
+  const list = document.createElement("ul");
+
+  list.className = "space-y-1 overflow-y-auto";
+
+  notes.forEach((note) => {
+    const li = document.createElement("li");
+    li.className = "text-gray-600 text-xs px-2 py-1 rounded";
+
+    li.textContent = note.content;
+
+    list.appendChild(li);
+  });
+
+  container.appendChild(list);
+};
+
+export { renderNotes, displayMovies, addNoteToFavorite };

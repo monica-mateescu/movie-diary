@@ -135,7 +135,7 @@ class MovieApp {
       wrapper.appendChild(ratingDiv);
 
       // Description icon and notes list
-      if (isFavourite(movie.id) && getNotes(movie.id)) {
+      if (isFavourite(movie.id) && getNotes(movie.id).length > 0) {
         const noteOverlay = document.createElement("div");
 
         const notes = getNotes(movie.id);

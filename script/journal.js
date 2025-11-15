@@ -102,6 +102,7 @@ function renderJournal() {
 
     // Notes list
     if (getNotes(movie.id)) {
+      descIcon.classList.add("text-yellow-200");
       const noteOverlay = document.createElement("div");
 
       const notes = getNotes(movie.id);

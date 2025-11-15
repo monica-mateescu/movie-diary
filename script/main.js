@@ -142,7 +142,7 @@ class MovieApp {
 
         const descIcon = document.createElement("span");
         descIcon.className =
-          "material-icons-only icon-hover icon-animated cursor-pointer text-yellow-400";
+          "material-icons-only icon-hover icon-animated cursor-pointer text-yellow-200";
 
         descIcon.title = "Add Description";
         descIcon.textContent = "description";

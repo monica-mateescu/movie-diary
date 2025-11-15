@@ -1,3 +1,5 @@
+import { getFavourites, saveFavourites } from "../favourites.js";
+
 const body = document.body;
 
 const truncate = (text, maxLength) => {
@@ -100,15 +102,15 @@ const displayNotes = (fav, container) => {
     const deleteBtn = document.createElement("button");
 
     li.className =
-      "border-b-2 border-gray-600 text-gray-100 flex gap-4 items-baseline px-4 py-2 justify-between";
+      "border-b-2 border-gray-600 text-gray-100 flex gap-4 items-baseline px-4 py-2 justify-between text-xs";
     p.textContent = note.content;
 
     deleteBtn.className =
-      "text-red-400 hover:text-red-600 active:text-red-600 text-sm";
+      "text-red-400 hover:text-red-600 active:text-red-600 text-xs font-bold";
     deleteBtn.textContent = "Delete";
 
     deleteBtn.addEventListener("click", () => {
-      const favs = JSON.parse(localStorage.getItem("favs")) ?? [];
+      const favs = getFavourites();
 
       const newFav = favs.find((f) => f.id === fav.id);
 
@@ -118,7 +120,7 @@ const displayNotes = (fav, container) => {
         newFav.notes = notesUpdated;
       }
 
-      localStorage.setItem("favs", JSON.stringify(favs));
+      saveFavourites(favs);
 
       li.remove();
     });
@@ -134,19 +136,19 @@ const displayNotes = (fav, container) => {
 const addNoteToFavorite = (id) => {
   const { dialog, content } = createDialog();
 
-  const favs = JSON.parse(localStorage.getItem("favs")) ?? [];
+  const favs = getFavourites();
   const fav = favs.find((fav) => fav.id === id);
 
   const form = document.createElement("form");
   const noteInput = document.createElement("textarea");
   const saveBtn = document.createElement("button");
 
-  form.className = "py-6";
+  form.className = "py-8 flex flex-col w-full";
   noteInput.className =
     "mt-2 w-full bg-gray-800 text-gray-100 p-2 rounded resize-none text-sm";
   noteInput.placeholder = "Add your note here...";
   saveBtn.className =
-    "mt-1 bg-gray-600 hover:bg-red-600 active:bg-red-600 text-gray-100 px-2 py-1 rounded text-xs";
+    "self-end mt-2 bg-gray-600 hover:bg-red-600 active:bg-red-600 text-gray-100 px-2 py-1 rounded text-xs";
   saveBtn.textContent = "Save Note";
 
   form.append(noteInput, saveBtn);
@@ -163,7 +165,7 @@ const addNoteToFavorite = (id) => {
     if (!val) {
       const p = document.createElement("p");
       p.className = "text-red-600 text-xs";
-      p.textContent = "Input cannot be empty";
+      p.textContent = "Note cannot be empty.";
 
       noteInput.insertAdjacentElement("afterend", p);
 
@@ -178,7 +180,8 @@ const addNoteToFavorite = (id) => {
     };
 
     fav.notes.push(newNote);
-    localStorage.setItem("favs", JSON.stringify(favs));
+
+    saveFavourites(favs);
 
     displayNotes(fav, content);
 
@@ -186,4 +189,23 @@ const addNoteToFavorite = (id) => {
   });
 };
 
-export { displayMovies, addNoteToFavorite };
+const renderNotes = (notes, container) => {
+  container.innerHTML = "";
+
+  const list = document.createElement("ul");
+
+  list.className = "space-y-1 overflow-y-auto";
+
+  notes.forEach((note) => {
+    const li = document.createElement("li");
+    li.className = "text-gray-600 text-xs px-2 py-1 rounded";
+
+    li.textContent = note.content;
+
+    list.appendChild(li);
+  });
+
+  container.appendChild(list);
+};
+
+export { renderNotes, displayMovies, addNoteToFavorite };

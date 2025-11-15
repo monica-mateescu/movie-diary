@@ -2,9 +2,11 @@ import {
   getFavourites,
   removeFromFavourites,
   setupResponsiveIcons,
+  getNotes,
 } from "./favourites.js";
 
-import { addNoteToFavorite } from "./modules/ui.js";
+import { renderNotes, addNoteToFavorite } from "./modules/ui.js";
+import { searchForm, handleSearchFormSubmit } from "./modules/search.js";
 
 const main = document.querySelector("main");
 
@@ -98,6 +100,26 @@ function renderJournal() {
       addNoteToFavorite(movie.id);
     });
 
+    // Notes list
+    if (getNotes(movie.id).length > 0) {
+      descIcon.classList.add("text-yellow-200");
+      const noteOverlay = document.createElement("div");
+
+      const notes = getNotes(movie.id);
+
+      descIcon.addEventListener("mouseenter", () => {
+        renderNotes(notes, noteOverlay);
+
+        noteOverlay.className =
+          "absolute w-full h-full inset-0 bg-yellow-400 flex flex-col justify-end p-4";
+        wrapper.appendChild(noteOverlay);
+      });
+      descIcon.addEventListener("mouseleave", () => {
+        console.log("moueleave");
+        noteOverlay.remove();
+      });
+    }
+
     iconWrapper.appendChild(favIcon);
     iconWrapper.appendChild(descIcon);
     wrapper.appendChild(img);
@@ -144,3 +166,5 @@ function renderJournal() {
 setupResponsiveIcons();
 
 renderJournal();
+
+searchForm.addEventListener("submit", handleSearchFormSubmit);

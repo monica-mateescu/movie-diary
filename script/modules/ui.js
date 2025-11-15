@@ -102,11 +102,11 @@ const displayNotes = (fav, container) => {
     const deleteBtn = document.createElement("button");
 
     li.className =
-      "border-b-2 border-gray-600 text-gray-100 flex gap-4 items-baseline px-4 py-2 justify-between";
+      "border-b-2 border-gray-600 text-gray-100 flex gap-4 items-baseline px-4 py-2 justify-between text-xs";
     p.textContent = note.content;
 
     deleteBtn.className =
-      "text-red-400 hover:text-red-600 active:text-red-600 text-sm";
+      "text-red-400 hover:text-red-600 active:text-red-600 text-xs font-bold";
     deleteBtn.textContent = "Delete";
 
     deleteBtn.addEventListener("click", () => {
@@ -143,12 +143,12 @@ const addNoteToFavorite = (id) => {
   const noteInput = document.createElement("textarea");
   const saveBtn = document.createElement("button");
 
-  form.className = "py-6";
+  form.className = "py-8 flex flex-col w-full";
   noteInput.className =
     "mt-2 w-full bg-gray-800 text-gray-100 p-2 rounded resize-none text-sm";
   noteInput.placeholder = "Add your note here...";
   saveBtn.className =
-    "mt-1 bg-gray-600 hover:bg-red-600 active:bg-red-600 text-gray-100 px-2 py-1 rounded text-xs";
+    "self-end mt-2 bg-gray-600 hover:bg-red-600 active:bg-red-600 text-gray-100 px-2 py-1 rounded text-xs";
   saveBtn.textContent = "Save Note";
 
   form.append(noteInput, saveBtn);
@@ -165,7 +165,7 @@ const addNoteToFavorite = (id) => {
     if (!val) {
       const p = document.createElement("p");
       p.className = "text-red-600 text-xs";
-      p.textContent = "Input cannot be empty";
+      p.textContent = "Note cannot be empty.";
 
       noteInput.insertAdjacentElement("afterend", p);
 

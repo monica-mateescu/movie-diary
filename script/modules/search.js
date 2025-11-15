@@ -1,4 +1,4 @@
-import { fetchSearchMovie } from "./modules/network.js";
+import { fetchSearchMovie } from "./network.js";
 
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search");
@@ -17,4 +17,4 @@ const handleSearchFormSubmit = (e) => {
   searchForm.reset();
 };
 
-searchForm.addEventListener("submit", handleSearchFormSubmit);
+export { searchForm, handleSearchFormSubmit };

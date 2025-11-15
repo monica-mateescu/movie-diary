@@ -6,6 +6,7 @@ import {
   removeFromFavourites,
   setupResponsiveIcons,
 } from "./favourites.js";
+import { searchForm, handleSearchFormSubmit } from "./modules/search.js";
 
 // MovieApp class to manage fetching and displaying movies
 class MovieApp {
@@ -207,3 +208,5 @@ app.fetchPopularMovies();
 
 // Responsive Design: Icons
 setupResponsiveIcons();
+
+searchForm.addEventListener("submit", handleSearchFormSubmit);

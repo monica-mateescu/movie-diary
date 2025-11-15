@@ -5,6 +5,7 @@ import {
 } from "./favourites.js";
 
 import { addNoteToFavorite } from "./modules/ui.js";
+import { searchForm, handleSearchFormSubmit } from "./modules/search.js";
 
 const main = document.querySelector("main");
 
@@ -144,3 +145,5 @@ function renderJournal() {
 setupResponsiveIcons();
 
 renderJournal();
+
+searchForm.addEventListener("submit", handleSearchFormSubmit);

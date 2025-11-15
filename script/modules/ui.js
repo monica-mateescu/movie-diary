@@ -1,3 +1,5 @@
+import { getFavourites, saveFavourites } from "../favourites.js";
+
 const body = document.body;
 
 const truncate = (text, maxLength) => {
@@ -108,7 +110,7 @@ const displayNotes = (fav, container) => {
     deleteBtn.textContent = "Delete";
 
     deleteBtn.addEventListener("click", () => {
-      const favs = JSON.parse(localStorage.getItem("favs")) ?? [];
+      const favs = getFavourites();
 
       const newFav = favs.find((f) => f.id === fav.id);
 
@@ -118,7 +120,7 @@ const displayNotes = (fav, container) => {
         newFav.notes = notesUpdated;
       }
 
-      localStorage.setItem("favs", JSON.stringify(favs));
+      saveFavourites(favs);
 
       li.remove();
     });
@@ -134,7 +136,7 @@ const displayNotes = (fav, container) => {
 const addNoteToFavorite = (id) => {
   const { dialog, content } = createDialog();
 
-  const favs = JSON.parse(localStorage.getItem("favs")) ?? [];
+  const favs = getFavourites();
   const fav = favs.find((fav) => fav.id === id);
 
   const form = document.createElement("form");
@@ -178,7 +180,8 @@ const addNoteToFavorite = (id) => {
     };
 
     fav.notes.push(newNote);
-    localStorage.setItem("favs", JSON.stringify(favs));
+
+    saveFavourites(favs);
 
     displayNotes(fav, content);
 

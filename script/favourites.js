@@ -32,9 +32,9 @@ export function getIconSize() {
   if (window.innerWidth < 640) {
     return "20px";
   } else if (window.innerWidth < 1024) {
-    return "20px";
-  } else {
     return "25px";
+  } else {
+    return "30px";
   }
 }
 export function setupResponsiveIcons() {

@@ -171,3 +171,18 @@ const app = new MovieApp(API_KEY);
 app.fetchPopularMovies();
 setupResponsiveIcons();
 searchForm.addEventListener("submit", handleSearchFormSubmit);
+
+const menuBtn = document.getElementById("menu-btn");
+const mobileMenu = document.getElementById("mobile-menu");
+
+// --- Toggle mobile menu visibility when burger button is clicked ---
+menuBtn.addEventListener("click", () => {
+  mobileMenu.classList.toggle("hidden"); // show/hide menu
+});
+
+// --- Optional: close menu when clicking a link ---
+mobileMenu.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => {
+    mobileMenu.classList.add("hidden");
+  });
+});

@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="asset/Logo.png" />
+
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -106,16 +108,31 @@
     <script src="script/config.js"></script>
     <script src="script/main.js" type="module"></script>
   </head>
-  <body class="bg-aurora-cinema text-[#E1E2EC]">
-    <header class="container mx-auto px-4 py-8">
+  <body class="bg-aurora-cinema text-[var(--text-light)]">
+    <header
+      class="fixed top-0 left-0 w-full z-50 backdrop-blur-md md:backdrop-blur-md bg-aurora-cinema/80 md:bg-transparent"
+    >
       <!-- Navigation Section -->
-      <nav class="flex justify-between">
-        <a
-          href="index.html"
-          class="text-[var(--text-light)] text-lg font-medium"
-          >MOVIE DIARY</a
+      <nav
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <!-- Logo + Title -->
+        <figure class="flex items-center">
+          <img src="asset/Logo.png" alt="logo" class="w-20" />
+          <figcaption class="ml-2 flex items-center">
+            <a
+              href="index.html"
+              class="text-[var(--text-light)] text-lg font-medium"
+            >
+              My BOXOFFICE
+            </a>
+          </figcaption>
+        </figure>
+
+        <!-- Desktop / Tablet Navigation Links -->
+        <ul
+          class="hidden md:flex gap-2 text-[var(--text-light)] text-sm items-center"
         >
-        <ul class="flex gap-2 text-gray-100 text-sm">
           <li>
             <a href="index.html" class="hover:text-[var(--primary-red)]"
               >Home</a
@@ -127,34 +144,85 @@
             >
           </li>
         </ul>
+
+        <!-- Mobile Burger Button -->
+        <button
+          id="menu-btn"
+          class="md:hidden flex items-center justify-center p-2 rounded"
+        >
+          <!-- Hamburger Icon -->
+          <svg
+            class="w-6 h-6 text-[var(--text-light)]"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
       </nav>
-      <!-- Search Section -->
-      <div class="flex justify-center">
-        <form action="#" id="search-form" class="flex mt-8 w-100">
-          <div class="flex items-center bg-[#2A2E3E] rounded-full w-full">
-            <label for="search" aria-label="Search for a movie" class="flex-1">
-              <input
-                type="text"
-                placeholder="Search for a movie"
-                id="search"
-                class="border-0 focus:outline-none focus:ring-0 flex-1 text-[var(--text-light)] placeholder-gray-400 text-sm px-4 py-2"
-              />
-            </label>
+
+      <!-- Mobile Menu (initially hidden) -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden absolute top-full left-0 w-full flex flex-col items-center py-4 bg-aurora-cinema opacity-80 backdrop-blur-md"
+      >
+        <!-- Menu links -->
+        <a
+          href="index.html"
+          class="text-[var(--icon-desc)] py-2 hover:text-[var(--primary-red)]"
+        >
+          Home
+        </a>
+        <a
+          href="journal.html"
+          class="text-[var(--icon-desc)] py-2 hover:text-[var(--primary-red)]"
+        >
+          Journal
+        </a>
+      </div>
+    </header>
+
+    <!-- HERO + SEARCH SECTION -->
+    <section
+      class="relative w-full pt-24 h-[300px] md:h-[360px] bg-cover bg-center"
+      style="background-image: url('asset/bg.png')"
+    >
+      <!-- Container to center  -->
+      <div
+        class="container mx-auto h-full flex items-center justify-center px-4"
+      >
+        <!-- SEARCH FORM  -->
+        <form id="search-form" class="w-full max-w-md">
+          <!-- Flex container for input and button -->
+          <div
+            class="flex w-full bg-[var(--card-bg)]/90 rounded-full overflow-hidden"
+          >
+            <!-- Input field -->
+            <input
+              id="search"
+              type="text"
+              placeholder="Search for a movie"
+              class="flex-1 text-[var(--text-light)] text-sm px-4 py-3 bg-transparent focus:outline-none"
+            />
+            <!-- Submit button  -->
             <button
               type="submit"
-              class="bg-[var(--primary-red)] rounded-full hover:bg-[#FF2A45] text[var(--text-light)] text-sm px-6 py-2 ; color: var(--text-light);"
+              class="flex-shrink-0 bg-[var(--primary-red)] hover:bg-[#FF2A45] text-[var(--text-light)] text-sm px-6 py-3 rounded-full"
             >
               Search
             </button>
           </div>
         </form>
       </div>
-    </header>
+    </section>
     <main class="container mx-auto px-4 py-8">
-      <section
-        id="popular-movies "
-        class="mt-12 mb-12 border-t border-[var(--border-gray)]"
-      >
+      <section id="popular-movies " class="mb-12 border-[var(--border-gray)]">
         <h2
           class="text-3xl font-bold ml-3 mt-4 mb-6 text-[var(--text-light)] italic"
         >

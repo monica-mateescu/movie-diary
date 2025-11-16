@@ -9,6 +9,19 @@ import {
 } from "./favourites.js";
 import { searchForm, handleSearchFormSubmit } from "./modules/search.js";
 import { renderNotes } from "./modules/ui.js";
+import {
+  getCardStyle,
+  getFadeOverlay,
+  getFavIconStyle,
+  getIconWrapperStyle,
+  getPosterStyle,
+  getRating,
+  attachFavIconHandler,
+  getDescIconStyle,
+  getNoteOverlay,
+  getTitleStyle,
+  getDescStyle,
+} from "./moviecards.js";
 
 // MovieApp class to manage fetching and displaying movies
 class MovieApp {
@@ -51,84 +64,53 @@ class MovieApp {
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
         : "https://via.placeholder.com/200x300?text=No+Image";
 
-      // Movie rating
-      const rating = movie.vote_average || "N/A";
-
-      // Create the main card
+      // Main card
       const card = document.createElement("div");
-      card.className =
-        "bg-[var(--card-bg)] rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300 group w-full sm:w-[45%] md:w-[23%]";
+      card.className = getCardStyle();
 
       // Relative wrapper
       const wrapper = document.createElement("div");
       wrapper.className = "relative";
 
-      // Poster image
+      // Poster
       const img = document.createElement("img");
       img.src = poster;
       img.alt = title;
       // img.className = "w-full object-cover";
-      img.className = "w-full h-[200px] object-cover rounded-lg";
+      img.className = getPosterStyle();
 
       // --- Bottom fade overlay ---
       const fade = document.createElement("div");
-      fade.className =
-        "absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-t from-[#2A2E3E] via-[#2A2E3Eaa] to-transparent pointer-events-none";
+      fade.className = getFadeOverlay();
 
-      // Rating badge
+      // ⭐Rating badge
+      const rating = movie.vote_average || "N/A";
       const ratingDiv = document.createElement("div");
-      ratingDiv.className =
-        "absolute top-2 left-2 bg-[#FF4C60]/80 text-white text-[8px] p-1 rounded";
-      ratingDiv.textContent = `${rating.toFixed(1)}/10`;
+      ratingDiv.className = getRating();
+      ratingDiv.textContent = `⭐ ${rating.toFixed(1)} `;
 
       // Favorite icon
       const favIcon = document.createElement("span");
-      favIcon.className =
-        "material-icons-only icon-hover icon-animated cursor-pointer text-[var(--icon-light)]";
-
+      favIcon.className = getFavIconStyle();
       favIcon.title = "Add to Favorite";
       favIcon.textContent = "favorite";
       favIcon.style.fontSize = getIconSize();
       favIcon.addEventListener("animationend", () => {
         favIcon.classList.remove("bounce-on-click");
       });
-
-      //============================================================
-      //============ ADD FAVOURITES ================================
-      //============================================================
       const alreadyFav = isFavourite(movie.id);
       if (alreadyFav) {
         favIcon.style.color = "#ff4c60";
       }
-
-      favIcon.addEventListener("click", () => {
-        const movieObj = {
-          id: movie.id,
-          title: movie.title,
-          image: movie.poster_path,
-          info: movie.overview,
-        };
-
-        if (!isFavourite(movie.id)) {
-          // 💥 Bounce-Effekt beim Klicken
-          favIcon.classList.remove("bounce-on-click");
-          void favIcon.offsetWidth;
-          favIcon.classList.add("bounce-on-click");
-        }
-
-        if (isFavourite(movie.id)) {
-          removeFromFavourites(movie.id);
-          favIcon.style.color = "";
-        } else {
-          addToFavourites(movieObj);
-          favIcon.style.color = "#ff4c60";
-        }
+      attachFavIconHandler(favIcon, movie, {
+        isFavourite,
+        addToFavourites,
+        removeFromFavourites,
       });
 
-      // ICON WRAPPER (NEU)
+      // Icon Wrapper
       const iconWrapper = document.createElement("div");
-      iconWrapper.className =
-        "absolute top-1 right-1 flex items-center gap-0.5 z-10";
+      iconWrapper.className = getIconWrapperStyle();
       iconWrapper.appendChild(favIcon);
       wrapper.appendChild(img);
       wrapper.appendChild(fade);
@@ -137,24 +119,16 @@ class MovieApp {
       // Description icon and notes list
       if (isFavourite(movie.id) && getNotes(movie.id).length > 0) {
         const noteOverlay = document.createElement("div");
-
         const notes = getNotes(movie.id);
-
         const descIcon = document.createElement("span");
-        descIcon.className =
-          "material-icons-only icon-hover icon-animated cursor-pointer text-yellow-200";
-
+        descIcon.className = getDescIconStyle();
         descIcon.title = "Add Description";
         descIcon.textContent = "description";
         descIcon.style.fontSize = getIconSize();
-
         iconWrapper.appendChild(descIcon);
-
         descIcon.addEventListener("mouseenter", () => {
           renderNotes(notes, noteOverlay);
-
-          noteOverlay.className =
-            "absolute w-full h-full inset-0 bg-yellow-400 flex flex-col justify-end p-4";
+          noteOverlay.className = getNoteOverlay();
           wrapper.appendChild(noteOverlay);
         });
         descIcon.addEventListener("mouseleave", () => {
@@ -162,13 +136,11 @@ class MovieApp {
           noteOverlay.remove();
         });
       }
-
       wrapper.appendChild(iconWrapper);
 
       // Movie title section
       const titleDiv = document.createElement("div");
-      titleDiv.className =
-        "text-[var(--primary-red)] text-xs font-bold text-center p-1";
+      titleDiv.className = getTitleStyle();
       titleDiv.textContent = title;
 
       // Append all to card
@@ -177,8 +149,7 @@ class MovieApp {
 
       // Movie description section
       const descDiv = document.createElement("p");
-      descDiv.className =
-        "text-[var(--text-light)] text-[8px] text-left px-3 mb-4";
+      descDiv.className = getDescStyle();
       descDiv.textContent = movie.overview || "No description available.";
 
       // --- Tailwind + inline style for 3-line clamp ---
@@ -189,38 +160,8 @@ class MovieApp {
       descDiv.style.maxHeight = "4 rem"; // Approximate height for 3 lines with font-size 8px
       descDiv.style.lineHeight = "1.2em"; // Set line height for proper spacing
       descDiv.style.textOverflow = "ellipsis"; // Show "..." at the end of truncated text
-
       card.appendChild(descDiv);
-
-      // Finally add card to container
       this.container.appendChild(card);
-
-      //   const card = document.createElement("div");
-      //   card.className =
-      //     "max-w-md rounded-lg shadow-md drop-shadow-md overflow-hidden text-black hover:scale-105 duration-300";
-
-      //   // Set inner HTML of card
-      //   card.innerHTML = `
-      //     <div class="relative ">
-      //       <img src="${poster}" alt="${title}" class="w-full object-cover"/>
-
-      //       <div class="absolute top-2 left-2 bg-red-600 text-white text-[6px] p-1 rounded">
-      //         ⭐ ${rating.toFixed(1)}/10
-      //         </div>
-
-      //         <span id class="absolute top-1 right-7  material-icons-only cursor-pointer text-white hover:text-red-600 hover:"  title="Add to Favorite">favorite</span>
-      //         <span class="absolute top-1 right-2 material-icons-only cursor-pointer text-white hover:text-red-600" title="Add Description">description</span>
-
-      //       </div>
-
-      //         <div class="text-gray-100 text-sm font-bold text-center ab p-2">
-      //           ${title}
-      //            </div>
-      //     </div>
-      //   `;
-
-      //   // Append card to container
-      //   this.container.appendChild(card);
     });
   }
 }
@@ -228,8 +169,5 @@ class MovieApp {
 // Instantiate the class and fetch movies
 const app = new MovieApp(API_KEY);
 app.fetchPopularMovies();
-
-// Responsive Design: Icons
 setupResponsiveIcons();
-
 searchForm.addEventListener("submit", handleSearchFormSubmit);

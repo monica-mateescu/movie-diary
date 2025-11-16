@@ -1,5 +1,8 @@
 import {
+  addToFavourites,
   getFavourites,
+  getIconSize,
+  isFavourite,
   removeFromFavourites,
   setupResponsiveIcons,
   getNotes,
@@ -7,164 +10,214 @@ import {
 
 import { renderNotes, addNoteToFavorite } from "./modules/ui.js";
 import { searchForm, handleSearchFormSubmit } from "./modules/search.js";
+import {
+  getCardStyle,
+  getFadeOverlay,
+  getFavIconStyle,
+  getIconWrapperStyle,
+  getPosterStyle,
+  getRating,
+  attachFavIconHandler,
+  getDescIconStyle,
+  getNoteOverlay,
+  getTitleStyle,
+  getDescStyle,
+} from "./moviecards.js";
 
 const main = document.querySelector("main");
 
-function getIconSize() {
-  if (window.innerWidth < 640) {
-    return "28px";
-  } else if (window.innerWidth < 1024) {
-    return "32px";
-  } else {
-    return "36px";
-  }
-}
-
 function createJournalLayout() {
-  const section = document.createElement("section");
-  section.className = "container mx-auto px-4 py-8";
-
-  const heading = document.createElement("h1");
+  const section = main.querySelector("section");
+  const heading = section.querySelector("h2");
   heading.textContent = "Favourite Movies";
-  heading.className = "text-2xl md:text-3xl font-semibold mb-6";
 
-  section.appendChild(heading);
-  main.appendChild(section);
+  const grid = section.querySelector("#cardsContainer");
+  grid.innerHTML = "";
 
-  return section;
+  return { section, grid };
 }
 
 function renderEmptyState(section) {
-  const emptyMessage = document.createElement("p");
-  emptyMessage.textContent =
-    "You haven't added any favourite movies yet. Go back to the Homepage and add some! 😊";
-  emptyMessage.className = "text-gray-300 text-sm";
+  const message = "Wow, such empty...";
 
-  section.appendChild(emptyMessage);
+  const wrapper = document.createElement("div");
+  wrapper.className = "flex flex-col items-center gap-3 mt-4";
+
+  const icon = document.createElement("span");
+  icon.className =
+    "material-icons text-gray-400 text-5xl opacity-0 animate-fadeUp";
+  icon.style.animationDelay = "0ms";
+  icon.textContent = "cruelty_free";
+  icon.style.fontSize = "80px";
+  wrapper.appendChild(icon);
+
+  const p = document.createElement("p");
+  p.className =
+    "text-gray-300 text-lg font-semibold italic flex gap-1 flex-wrap";
+
+  message.split("").forEach((char, index) => {
+    const span = document.createElement("span");
+    span.textContent = char;
+    span.className = "inline-block opacity-0 animate-fadeUp";
+    span.style.animationDelay = `${index * 60 + 200}ms`;
+    p.appendChild(span);
+  });
+
+  wrapper.appendChild(p);
+  section.appendChild(wrapper);
 }
 
 function renderJournal() {
   const favourites = getFavourites();
-  const section = createJournalLayout();
+  const { section, grid } = createJournalLayout();
 
   if (!favourites.length) {
-    renderEmptyState(section);
+    renderEmptyState(section, grid);
     return;
   }
 
-  const grid = document.createElement("div");
-  grid.className =
-    "grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
-
   favourites.forEach((movie) => {
-    const card = document.createElement("article");
-    card.className =
-      "max-w-xs sm:max-w-sm rounded-lg shadow-md drop-shadow-md overflow-visible bg-[var(--lightgray)]";
+    // === Card wrapper ===
+    const card = document.createElement("div");
+    card.className = getCardStyle();
 
     const wrapper = document.createElement("div");
     wrapper.className = "relative";
 
-    // === Movie Image ===
-    const img = document.createElement("img");
+    // === Poster ===
     const imagePath = movie.image;
-    img.src =
+    const poster =
       typeof imagePath === "string" && imagePath.startsWith("http")
         ? imagePath
-        : `https://image.tmdb.org/t/p/w500${imagePath}`;
-    img.alt = movie.title;
-    img.className = "w-full object-cover";
+        : imagePath
+        ? `https://image.tmdb.org/t/p/w500${imagePath}`
+        : "https://via.placeholder.com/200x300?text=No+Image";
 
-    const iconWrapper = document.createElement("div");
-    iconWrapper.className =
-      "absolute top-1 right-1 flex items-center gap-0.5 z-10";
+    const img = document.createElement("img");
+    img.src = poster;
+    img.alt = movie.title || "Movie poster";
+    img.className = getPosterStyle();
 
-    // === Icon Favourites ===
+    // --- Bottom fade overlay ---
+    const fade = document.createElement("div");
+    fade.className = getFadeOverlay();
+
+    // ⭐ Rating badge (falls keine Zahl vorhanden -> N/A)
+    const ratingDiv = document.createElement("div");
+    ratingDiv.className = getRating();
+    const ratingValue =
+      typeof movie.vote_average === "number"
+        ? movie.vote_average
+        : typeof movie.rating === "number"
+        ? movie.rating
+        : null;
+    ratingDiv.textContent =
+      ratingValue != null ? `⭐ ${ratingValue.toFixed(1)} ` : "⭐ N/A";
+
+    // === Favourite icon ===
     const favIcon = document.createElement("span");
-    favIcon.className =
-      "material-icons-only icon-hover cursor-pointer text-white";
-    favIcon.textContent = "favorite";
+    favIcon.className = getFavIconStyle();
     favIcon.title = "Remove from favourites";
+    favIcon.textContent = "favorite";
     favIcon.style.fontSize = getIconSize();
-    favIcon.style.color = "red";
 
-    // === Icon Notes ===
+    favIcon.addEventListener("animationend", () => {
+      favIcon.classList.remove("bounce-on-click");
+    });
+
+    if (isFavourite(movie.id)) {
+      favIcon.style.color = "#ff4c60";
+    }
+
+    attachFavIconHandler(favIcon, movie, {
+      isFavourite,
+      addToFavourites,
+      removeFromFavourites,
+    });
+
+    // === Description icon / Notes ===
+    const iconWrapper = document.createElement("div");
+    iconWrapper.className = getIconWrapperStyle();
+    iconWrapper.appendChild(favIcon);
+
     const descIcon = document.createElement("span");
-    descIcon.className =
-      "material-icons-only icon-hover cursor-pointer text-white ";
-    descIcon.textContent = "description";
+    descIcon.className = getDescIconStyle();
     descIcon.title = "Add Description";
+    descIcon.textContent = "description";
     descIcon.style.fontSize = getIconSize();
+    iconWrapper.appendChild(descIcon);
 
-    // Add personal notes
+    // Klick -> eigene Notiz hinzufügen
     descIcon.addEventListener("click", () => {
       addNoteToFavorite(movie.id);
     });
 
-    // Notes list
-    if (getNotes(movie.id).length > 0) {
-      descIcon.classList.add("text-yellow-200");
+    // Hover -> Overlay, falls Notizen vorhanden
+    const notes = getNotes(movie.id);
+    if (notes.length > 0) {
       const noteOverlay = document.createElement("div");
-
-      const notes = getNotes(movie.id);
+      descIcon.classList.add("text-yellow-200");
 
       descIcon.addEventListener("mouseenter", () => {
         renderNotes(notes, noteOverlay);
-
-        noteOverlay.className =
-          "absolute w-full h-full inset-0 bg-yellow-400 flex flex-col justify-end p-4";
+        noteOverlay.className = getNoteOverlay();
         wrapper.appendChild(noteOverlay);
       });
+
       descIcon.addEventListener("mouseleave", () => {
-        console.log("moueleave");
         noteOverlay.remove();
       });
     }
 
-    iconWrapper.appendChild(favIcon);
-    iconWrapper.appendChild(descIcon);
+    // === Wrapper zusammenbauen ===
     wrapper.appendChild(img);
+    wrapper.appendChild(fade);
+    wrapper.appendChild(ratingDiv);
     wrapper.appendChild(iconWrapper);
 
-    // === Movie Info ===
-    const body = document.createElement("div");
-    body.className = "p-3";
+    card.appendChild(wrapper);
 
-    const title = document.createElement("h2");
-    title.textContent = movie.title;
-    title.className = "text-sm font-semibold text-gray-100 mb-2";
+    // === Titel wie in main.js ===
+    const titleDiv = document.createElement("div");
+    titleDiv.className = getTitleStyle();
+    titleDiv.textContent = movie.title;
+    card.appendChild(titleDiv);
 
-    const info = document.createElement("p");
+    // === Beschreibung (3-Zeilen-Clamp wie in main.js) ===
+    const descDiv = document.createElement("p");
+    descDiv.className = getDescStyle();
+
     const text =
       typeof movie.info === "string" && movie.info.length > 180
         ? movie.info.slice(0, 180) + "..."
         : movie.info;
-    info.textContent = text || "No description available.";
-    info.className = "text-xs text-gray-200";
 
-    body.appendChild(title);
-    body.appendChild(info);
-    card.appendChild(wrapper);
-    card.appendChild(body);
+    descDiv.textContent = text || "No description available.";
+
+    descDiv.style.display = "-webkit-box";
+    descDiv.style.webkitBoxOrient = "vertical";
+    descDiv.style.overflow = "hidden";
+    descDiv.style.webkitLineClamp = "3";
+    descDiv.style.maxHeight = "4 rem";
+    descDiv.style.lineHeight = "1.2em";
+    descDiv.style.textOverflow = "ellipsis";
+
+    card.appendChild(descDiv);
     grid.appendChild(card);
 
-    // === Remove Favourites ==============
+    // Zusätzliche Logik: wenn Herz "aus" -> Karte aus dem Journal entfernen
     favIcon.addEventListener("click", () => {
-      removeFromFavourites(movie.id);
-      card.remove();
+      if (!isFavourite(movie.id)) {
+        card.remove();
 
-      if (!grid.children.length) {
-        section.removeChild(grid);
-        renderEmptyState(section);
+        if (!grid.children.length) {
+          renderEmptyState(section, grid);
+        }
       }
     });
   });
-
-  section.appendChild(grid);
 }
 
-// Responsive Design: Icons
 setupResponsiveIcons();
-
 renderJournal();
-
 searchForm.addEventListener("submit", handleSearchFormSubmit);

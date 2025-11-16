@@ -7,18 +7,18 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-
     <title>Movie Diary | Journal</title>
 
     <style>
       body {
         font-family: "Poppins", sans-serif;
       }
+
       .material-icons-only {
         font-family: "Material Icons";
         font-weight: normal;
         font-style: normal;
-        font-size: 16px;
+        font-size: 10px;
         display: inline-block;
         line-height: 1;
         text-transform: none;
@@ -29,55 +29,137 @@
         -webkit-user-select: none;
         outline: none;
         pointer-events: auto;
+        transition: transform 0.2s ease-out, color 0.2s ease-out;
       }
+
       .material-icons-only:focus {
         outline: none;
       }
+
       .icon-hover {
         transition: transform 0.18s ease-out;
       }
 
       .icon-hover:hover {
-        transform: scale(1.25);
+        transform: scale(1.15);
       }
 
       :root {
-        --red: #ff0000; /* primary buttons, links */
-        --darkgray: #282828; /* backgrounds */
-        --lightgray: #787777; /* secondary text & Cards bg*/
+        --primary-red: #ff4c60; /* favorite & buttons */
+        --background-dark: #1b1f28; /* body background */
+        --card-bg: #2a2e3e; /* card background */
+        --text-light: #e1e2ec; /* titles and text */
+        --icon-light: #f0f0f0; /* icons */
+        --icon-desc: white; /* description icon */
+        --border-gray: #3a3f4f; /* borders */
+      }
+      @keyframes fadeUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fadeUp {
+        animation: fadeUp 0.6s ease-out forwards;
+      }
+
+      @keyframes fav-bounce {
+        0% {
+          transform: scale(1.15);
+        }
+        30% {
+          transform: scale(2.1);
+        }
+        60% {
+          transform: scale(0.95);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .bounce-on-click {
+        animation: fav-bounce 0.7s ease-out;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .bg-aurora-cinema {
+          background: radial-gradient(
+              circle at 10% 0%,
+              rgba(255, 0, 204, 0.05) 0,
+              transparent 55%
+            ),
+            radial-gradient(
+              circle at 90% 0%,
+              rgba(0, 234, 255, 0.18) 0,
+              transparent 55%
+            ),
+            radial-gradient(
+              circle at 0% 80%,
+              rgba(255, 166, 0, 0.1) 0,
+              transparent 50%
+            ),
+            radial-gradient(
+              circle at 100% 90%,
+              rgba(255, 75, 75, 0.1) 0,
+              transparent 55%
+            ),
+            linear-gradient(to bottom, #020617 0%, #020617 40%, #020819 100%);
+          background-attachment: fixed;
+        }
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="script/config.js"></script>
     <script src="script/journal.js" type="module"></script>
   </head>
-  <body class="bg-[var(--darkgray)] text-white">
+
+  <body class="bg-aurora-cinema text-[#E1E2EC]">
     <header class="container mx-auto px-4 py-8">
       <!-- Navigation Section -->
       <nav class="flex justify-between">
-        <a href="index.html" class="text-gray-300 text-lg font-medium"
+        <a
+          href="index.html"
+          class="text-[var(--text-light)] text-lg font-medium"
           >MOVIE DIARY</a
         >
         <ul class="flex gap-2 text-gray-100 text-sm">
-          <li><a href="index.html" class="hover:text-red-600">Home</a></li>
-          <li><a href="journal.html" class="hover:text-red-600">Journal</a></li>
+          <li>
+            <a href="index.html" class="hover:text-[var(--primary-red)]"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a href="journal.html" class="hover:text-[var(--primary-red)]"
+              >Journal</a
+            >
+          </li>
         </ul>
       </nav>
+
       <!-- Search Section -->
       <div class="flex justify-center">
         <form action="#" id="search-form" class="flex mt-8 w-100">
-          <div class="flex items-center bg-gray-700 rounded-full w-full">
+          <div class="flex items-center bg-[#2A2E3E] rounded-full w-full">
             <label for="search" aria-label="Search for a movie" class="flex-1">
               <input
                 type="text"
                 placeholder="Search for a movie"
                 id="search"
-                class="bg-transparent border-0 focus:outline-none focus:ring-0 flex-1 text-gray-100 placeholder-gray-400 text-sm px-4 py-2"
+                class="border-0 focus:outline-none focus:ring-0 flex-1 text-[var(--text-light)] placeholder-gray-400 text-sm px-4 py-2"
               />
             </label>
             <button
               type="submit"
-              class="bg-gray-600 rounded-full hover:bg-red-600 text-gray-100 text-sm px-6 py-2"
+              class="bg-[var(--primary-red)] rounded-full hover:bg-[#FF2A45] text[var(--text-light)] text-sm px-6 py-2 ; color: var(--text-light);"
             >
               Search
             </button>
@@ -85,7 +167,21 @@
         </form>
       </div>
     </header>
-    <main></main>
+
+    <main class="container mx-auto px-4 py-8">
+      <section
+        id="popular-movies"
+        class="mt-12 mb-12 border-t border-[var(--border-gray)]"
+      >
+        <h2
+          class="text-3xl font-bold ml-3 mt-4 mb-6 text-[var(--text-light)] italic"
+        >
+          Favourite Movies
+        </h2>
+        <div id="cardsContainer" class="flex flex-wrap gap-4"></div>
+      </section>
+    </main>
+
     <footer></footer>
   </body>
 </html>

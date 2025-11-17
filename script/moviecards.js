@@ -22,7 +22,7 @@ export function getDescIconStyle() {
   return "material-icons-only icon-hover icon-animated cursor-pointer text-[var(--icon-light)]";
 }
 export function getNoteOverlay() {
-  return "absolute w-full h-full inset-0 bg-yellow-400 flex flex-col justify-end p-4";
+  return "absolute w-full h-full inset-0 bg-aurora-cinema opacity-90 text-[#E1E2EC] flex flex-col justify-end p-4";
 }
 export function getTitleStyle() {
   return "text-[var(--primary-red)] text-xs font-bold text-center p-1";

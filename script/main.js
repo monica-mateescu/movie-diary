@@ -126,13 +126,13 @@ class MovieApp {
         descIcon.textContent = "description";
         descIcon.style.fontSize = getIconSize();
         iconWrapper.appendChild(descIcon);
+
         descIcon.addEventListener("mouseenter", () => {
           renderNotes(notes, noteOverlay);
           noteOverlay.className = getNoteOverlay();
           wrapper.appendChild(noteOverlay);
         });
         descIcon.addEventListener("mouseleave", () => {
-          console.log("moueleave");
           noteOverlay.remove();
         });
       }

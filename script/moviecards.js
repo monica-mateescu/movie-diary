@@ -19,7 +19,7 @@ export function getFavIconStyle() {
   return "material-icons-only icon-hover icon-animated cursor-pointer text-[var(--icon-light)] pt-0.5 pr-1";
 }
 export function getDescIconStyle() {
-  return "material-icons-only icon-hover icon-animated cursor-pointer text-yellow-200";
+  return "material-icons-only icon-hover icon-animated cursor-pointer text-[var(--icon-light)]";
 }
 export function getNoteOverlay() {
   return "absolute w-full h-full inset-0 bg-yellow-400 flex flex-col justify-end p-4";

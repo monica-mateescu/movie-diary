@@ -18,9 +18,9 @@ const createDialog = () => {
   dialog.className =
     "fixed inset-0 flex justify-center items-center w-full h-full bg-black/40 backdrop-blur-sm z-50";
   container.className =
-    "bg-gray-700 rounded-lg w-full lg:w-2/3 max-h-[80vh] p-4 relative";
+    "bg-[var(--card-bg)]/80 rounded-lg w-full lg:w-2/3 max-h-[80vh] p-4 relative";
   closeBtn.className =
-    "absolute top-4 right-4 bg-gray-600 hover:bg-red-600 rounded-lg px-2 text-gray-100 hover:text-white text-sm font-bold cursor-pointer";
+    "absolute top-4 right-4 bg-transparent hover:bg-red-600 rounded-lg px-2 text-[var(--text-light)] hover:text-white text-sm font-bold cursor-pointer";
   closeBtn.textContent = "x";
 
   content.className = "overflow-y-auto max-h-[65vh] pr-2";
@@ -39,7 +39,7 @@ const displayMovies = (movies) => {
 
   if (movies.length === 0) {
     const p = document.createElement("p");
-    p.className = "text-gray-100 pt-20";
+    p.className = "text-[var(--text-light)] pt-20";
     p.textContent = "No results found.";
     dialog.appendChild(p);
   } else {
@@ -55,7 +55,7 @@ const displayMovies = (movies) => {
 
       article.className = "flex lg:items-center border-b-2 border-gray-600 p-2";
       img.className = "self-start";
-      div.className = "text-gray-100 pl-5 text-sm";
+      div.className = "text-[var(--text-light)] pl-5 text-sm";
       h2.className = "text-sm font-semibold";
       span.className = "text-slate-100 text-xs";
       p.className = "mt-2";
@@ -102,7 +102,7 @@ const displayNotes = (fav, container) => {
     const deleteBtn = document.createElement("button");
 
     li.className =
-      "border-b-2 border-gray-600 text-gray-100 flex gap-4 items-baseline px-4 py-2 justify-between text-xs";
+      "border-b-2 border-gray-600 text-[var(--text-light)] flex gap-4 items-baseline px-4 py-2 justify-between text-xs";
     p.textContent = note.content;
 
     deleteBtn.className =
@@ -139,20 +139,23 @@ const addNoteToFavorite = (id) => {
   const favs = getFavourites();
   const fav = favs.find((fav) => fav.id === id);
 
+  const h2 = document.createElement("h2");
   const form = document.createElement("form");
   const noteInput = document.createElement("textarea");
   const saveBtn = document.createElement("button");
+  h2.className = "text-sm text-[var(--text-light)] mt-8 mb-2";
+  h2.innerHTML = `Reflections on <strong>${fav.title}</strong>`;
 
-  form.className = "py-8 flex flex-col w-full";
+  form.className = "pb-8 flex flex-col w-full";
   noteInput.className =
-    "mt-2 w-full bg-gray-800 text-gray-100 p-2 rounded resize-none text-sm";
+    "mt-2 w-full bg-[var(--card-bg)]/90 text-[var(--text-light)] p-2 rounded resize-none text-sm";
   noteInput.placeholder = "Add your note here...";
   saveBtn.className =
-    "self-end mt-2 bg-gray-600 hover:bg-red-600 active:bg-red-600 text-gray-100 px-2 py-1 rounded text-xs";
+    "self-end mt-2 bg-[var(--card-bg)]/90 hover:bg-red-600 active:bg-red-600 text-[var(--text-light)] px-2 py-1 rounded text-xs";
   saveBtn.textContent = "Save Note";
 
   form.append(noteInput, saveBtn);
-  content.appendChild(form);
+  content.append(h2, form);
   body.appendChild(dialog);
 
   displayNotes(fav, content);
@@ -198,7 +201,7 @@ const renderNotes = (notes, container) => {
 
   notes.forEach((note) => {
     const li = document.createElement("li");
-    li.className = "text-gray-600 text-xs px-2 py-1 rounded";
+    li.className = "text-[var(--text-light)]-100 text-xs px-2 py-1 rounded";
 
     li.textContent = note.content;
 

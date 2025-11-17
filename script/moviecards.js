@@ -7,7 +7,7 @@ export function getFadeOverlay() {
   return "absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-t from-[#2A2E3E] via-[#2A2E3Eaa] to-transparent pointer-events-none";
 }
 export function getPosterStyle() {
-  return "w-full h-[250px] object-cover rounded-lg";
+  return "w-full  object-cover rounded-lg h-[250px]";
 }
 export function getRating() {
   return "absolute top-2 left-2 bg-[#FF4C60]/80 text-white text-[12px] font-bold px-0.5 pr-3 italic rounded border border-[rgba(0,0,0,0.3)] shadow-[0_4px_10px_rgba(0,0,0,0.6)] ";

@@ -201,7 +201,7 @@ const renderNotes = (notes, container) => {
 
   notes.forEach((note) => {
     const li = document.createElement("li");
-    li.className = "text-[var(--text-light)]-100 text-xs px-2 py-1 rounded";
+    li.className = "text-[var(--text-light)] text-xs px-2 py-1 rounded";
 
     li.textContent = note.content;
 

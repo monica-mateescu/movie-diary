@@ -7,6 +7,7 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <link rel="icon" type="image/png" href="asset/Logo.png" />
     <title>Movie Diary | Journal</title>
 
     <style>
@@ -122,7 +123,9 @@
     <script src="script/journal.js" type="module"></script>
   </head>
 
-  <body class="bg-aurora-cinema text-[#E1E2EC]">
+  <body
+    class="bg-aurora-cinema text-[var(--text-light)] min-h-screen flex flex-col"
+  >
     <header
       class="fixed top-0 left-0 w-full z-50 bg-transparent backdrop-blur-md"
     >
@@ -227,7 +230,7 @@
         </form>
       </div>
     </section>
-    <main class="container mx-auto px-4 py-8 pt-20 md:pt-24">
+    <main class="container mx-auto px-4 py-8 pt-20 md:pt-24 flex-1">
       <section id="popular-movies" class="mb-12 border-[var(--border-gray)]">
         <h2
           class="text-3xl font-bold ml-3 mt-4 mb-6 text-[var(--text-light)] italic"
@@ -239,7 +242,7 @@
     </main>
 
     <footer
-      class="flex flex-col items-center text-[8px] p-4 bg-gradient-to-b from-bg-aurora-cinema/30 via-[var(--card-bg)]/60 to-[var(--card-bg)]"
+      class="flex flex-col items-center text-[8px] pb-4 pt-10 bg-gradient-to-b from-bg-aurora-cinema/30 via-[var(--card-bg)]/60 to-[var(--card-bg)]"
     >
       <figure><img src="asset/Logo.png" alt="logo" class="w-30" /></figure>
       <ul class="flex gap-5">
